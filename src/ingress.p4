@@ -25,9 +25,6 @@ control ingress(
 
     apply {
 
-        // used to determine I2E processing 
-        // will be overwritten in egress 
-        hdr.ethernet.src_addr = ig_intr_md.ingress_mac_tstamp;
 
         ig_md.port_event = 2; // read port
 
@@ -50,7 +47,7 @@ control ingress(
         if (ig_tm_md.ucast_egress_port > 0 && ig_tm_md.ucast_egress_port != RECIRCULATE_PORT) {
             if(ig_md.port_status == 0 && hdr.ethernet.ether_type == ETHERTYPE_IPV4) {
 
-              if(hdr.ipv4.diffserv < 200 && hdr.ipv4.ttl > 0) {
+              if(hdr.ipv4.diffserv < 2 && hdr.ipv4.ttl > 0) {
                 ip_frr_c.apply(hdr, ig_md, ig_tm_md, ig_intr_md);
 
                 hdr.ipv4.diffserv = hdr.ipv4.diffserv + 1;
